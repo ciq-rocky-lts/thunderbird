@@ -35,7 +35,7 @@ function dist_to_rhel_minor(str, start)
   end
   match = string.match(str, ".el9")
   if match then
-     return 4
+     return 5
   end
   return -1
 end}
@@ -125,7 +125,7 @@ end}
 # If set to .b2 or .b3 ... the processed source file needs to be renamed before upload, e.g.
 # thunderbird-102.8.0.b2.processed-source.tar.xz
 # When unset use processed source file name as is.
-##global buildnum             .b2
+##global buildnum .b2
 
 %bcond_without langpacks
 
@@ -135,7 +135,7 @@ end}
 
 Summary: Mozilla Thunderbird mail/newsgroup client
 Name: thunderbird
-Version: 115.9.0
+Version: 115.12.1
 Release: 1%{?dist}
 URL: http://www.mozilla.org/projects/thunderbird/
 License: MPLv1.1 or GPLv2+ or LGPLv2+
@@ -166,7 +166,7 @@ ExcludeArch: aarch64 s390 ppc ppc64
 #Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%%{version}%%{?pre_version}/source/thunderbird-%%{version}%%{?pre_version}.processed-source.tar.xz
 Source0: thunderbird-%{version}%{?pre_version}%{?buildnum}.processed-source.tar.xz
 %if %{with langpacks}
-Source1: thunderbird-langpacks-%{version}-20240318.tar.xz
+Source1: thunderbird-langpacks-%{version}-20240618.tar.xz
 %endif
 Source2: cbindgen-vendor.tar.xz
 Source3: process-official-tarball
@@ -221,7 +221,6 @@ Patch155: rhbz-1354671.patch
 
 # ---- Security patches ----
 Patch301: CVE-2023-44488-libvpx.patch
-Patch302: expat-CVE-2023-52425.patch
 
 # BUILD REQURES/REQUIRES
 %if %{?system_nss} && !0%{?bundle_nss}
@@ -959,7 +958,6 @@ echo "--------------------------------------------"
 cd media/libvpx/libvpx
 %patch -P301 -p1 -b .CVE-2023-44488-libvpx
 cd -
-%patch -P302 -p1 -b .expat-CVE-2023-52425
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -1517,11 +1515,30 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Fri Mar 29 2024 Skip Grube <sgrube@ciq.co> - 115.9.0-1
+* Sun Jun 23 2024 Skip Grube <sgrube@ciq.co> - 115.12.1-1
 - Backport security build for CIQ LTS Rocky 8.6
 
-* Tue Mar 26 2024 Release Engineering <releng@rockylinux.org> - 115.9.0-1
+* Thu Jun 20 2024 Release Engineering <releng@rockylinux.org> - 115.12.1-1
 - Add Rocky Linux debranding
+
+* Tue Jun 18 2024 Eike Rathke <erack@redhat.com> - 115.12.1-1
+- Update to 115.12.1 build1
+
+* Tue Jun 11 2024 Eike Rathke <erack@redhat.com> - 115.12.0-2
+- Update to 115.12.0 build2
+
+* Mon Jun 10 2024 Eike Rathke <erack@redhat.com> - 115.12.0-1
+- Update to 115.12.0 build1
+
+* Mon May 13 2024 Eike Rathke <erack@redhat.com> - 115.11.0-1
+- Update to 115.11.0 build2
+
+* Mon Apr 15 2024 Eike Rathke <erack@redhat.com> - 115.10.0-2
+- Update to 115.10.0 build2
+
+* Fri Apr 12 2024 Eike Rathke <erack@redhat.com> - 115.10.0-1
+- Update to 115.10.0 build1
+- Revert expat CVE-2023-52425 fix
 
 * Mon Mar 18 2024 Eike Rathke <erack@redhat.com> - 115.9.0-1
 - Update to 115.9.0 build1
